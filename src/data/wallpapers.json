@@ -54,5 +54,13 @@
     "tags": ["ocean", "sea", "window", "flowers", "blossoms", "beach", "aerial", "blue", "calm"],
     "featured": true,
     "added": "2026-10-06"
+  },
+  {
+    "id": "008",
+    "title": "Timeless columns",
+    "category": "Other",
+    "tags": ["aesthetic", "columns", "architecture", "classical", "sunset", "warm", "chandelier", "smoke", "gallery"],
+    "featured": false,
+    "added": "2026-10-06"
   }
 ]
