@@ -1,0 +1,8 @@
+[
+  { "name": "Abstract", "slug": "abstract", "description": "Flowing shapes, gradients and bold colour." },
+  { "name": "Minimal", "slug": "minimal", "description": "Quiet, simple and uncluttered." },
+  { "name": "Nature", "slug": "nature", "description": "Landscapes, forests, water and sky." },
+  { "name": "Dark", "slug": "dark", "description": "Deep tones that suit OLED screens." },
+  { "name": "3D", "slug": "3d", "description": "Rendered objects, glass and depth." },
+  { "name": "Other", "slug": "other", "description": "Everything that doesn't fit elsewhere." }
+]

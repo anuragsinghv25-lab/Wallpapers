@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryChips from '../../components/CategoryChips.astro';
+import Gallery from '../../components/Gallery.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import { categories, countsByCategory, inCategory } from '../../lib/wallpapers';
+
+export function getStaticPaths() {
+  const counts = countsByCategory();
+  // Only categories that contain at least one wallpaper get a page.
+  return categories.filter((c) => (counts.get(c.slug) ?? 0) > 0).map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const items = inCategory(category.slug);
+---
+
+<BaseLayout
+  title={`${category.name} iPhone wallpapers`}
+  description={`${category.description ?? ''} Download ${category.name} wallpapers for iPhone: Lock Screen and Home Screen.`.trim()}
+  image={items[0]?.preview.variants.at(-1)?.src}
+>
+  <div class="wrap">
+    <header class="page-head">
+      <a class="crumb" href="/">← All wallpapers</a>
+      <h1>{category.name}</h1>
+      {category.description && <p>{category.description}</p>}
+    </header>
+
+    <CategoryChips current={category.slug} />
+
+    <div style="margin-top: 18px"><SearchBar placeholder={`Search ${category.name}…`} /></div>
+
+    <Gallery wallpapers={items} heading={`All ${category.name}`} eagerCount={4} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,24 @@
+{
+  "name": "wallpapers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A static, metadata-driven iPhone wallpaper website.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "validate": "node scripts/validate-catalog.mjs",
+    "thumbs": "node scripts/make-thumbnails.mjs",
+    "prepare-catalog": "npm run validate && npm run thumbs",
+    "predev": "npm run prepare-catalog",
+    "dev": "astro dev",
+    "prebuild": "npm run prepare-catalog",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.3.5",
+    "sharp": "^0.35.5"
+  }
+}

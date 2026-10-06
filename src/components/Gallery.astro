@@ -1,0 +1,37 @@
+---
+import WallpaperCard from './WallpaperCard.astro';
+import type { Wallpaper } from '../lib/wallpapers';
+import { site } from '../config/site';
+
+interface Props {
+  wallpapers: Wallpaper[];
+  heading: string;
+  /** How many leading cards load immediately instead of lazily. */
+  eagerCount?: number;
+}
+const { wallpapers, heading, eagerCount = 0 } = Astro.props;
+---
+
+<section class="section" aria-labelledby="grid-heading">
+  <div class="section-head">
+    <h2 id="grid-heading" data-grid-heading data-default={heading}>{heading}</h2>
+    <span class="muted" data-count>{wallpapers.length} {wallpapers.length === 1 ? 'wallpaper' : 'wallpapers'}</span>
+  </div>
+
+  <ul class="grid" data-grid data-page-size={site.pageSize}>
+    {wallpapers.map((w, i) => <WallpaperCard wallpaper={w} eager={i < eagerCount} late={i >= site.pageSize} />)}
+  </ul>
+
+  <div class="empty" data-empty hidden>
+    <strong>No wallpapers found</strong>
+    Try a different word, like a colour or a mood.
+  </div>
+
+  <div class="more js-only" data-more hidden>
+    <button class="btn btn-ghost" type="button" style="width:auto" data-more-button>Show more</button>
+  </div>
+</section>
+
+<script>
+  import '../scripts/gallery.js';
+</script>

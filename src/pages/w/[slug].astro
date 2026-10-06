@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WallpaperCard from '../../components/WallpaperCard.astro';
+import { wallpapers, related, formatBytes } from '../../lib/wallpapers';
+import type { Wallpaper, SetImage } from '../../lib/wallpapers';
+
+export function getStaticPaths() {
+  return wallpapers.map((wallpaper) => ({ params: { slug: wallpaper.slug }, props: { wallpaper } }));
+}
+
+const { wallpaper: w } = Astro.props as { wallpaper: Wallpaper };
+const more = related(w);
+
+const addedOn = new Date(`${w.added}T00:00:00Z`).toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+});
+
+const largest = w.preview.variants[w.preview.variants.length - 1];
+const srcset = w.preview.variants.map((v) => `${v.src} ${v.w}w`).join(', ');
+
+const options: { key: 'lockscreen' | 'homescreen'; label: string; slugPart: string; image: SetImage }[] = [
+  { key: 'lockscreen', label: 'Lock Screen', slugPart: 'lockscreen', image: w.lockscreen },
+  { key: 'homescreen', label: 'Home Screen', slugPart: 'homescreen', image: w.homescreen },
+];
+---
+
+<BaseLayout
+  title={`${w.title} · ${w.category} iPhone wallpaper`}
+  description={`Download “${w.title}”, a ${w.category.toLowerCase()} iPhone wallpaper. Includes a Lock Screen and a Home Screen version.`}
+  image={largest.src}
+>
+  <div class="wrap">
+    <div class="detail">
+      <div class="detail-media">
+        <img
+          src={largest.src}
+          srcset={srcset}
+          sizes="(min-width: 900px) 520px, 92vw"
+          width={w.preview.width}
+          height={w.preview.height}
+          alt={`${w.title} wallpaper shown on an iPhone`}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+
+      <div class="detail-info">
+        <a class="crumb" href={`/category/${w.categorySlug}/`}>← {w.category}</a>
+        <h1>{w.title}</h1>
+        <p class="muted" style="margin-top: 8px">Added {addedOn}</p>
+
+        {
+          w.tags.length > 0 && (
+            <div class="tags">
+              <a class="pill pill-accent" href={`/category/${w.categorySlug}/`}>{w.category}</a>
+              {w.tags.map((tag) => <a class="pill" href={`/?q=${encodeURIComponent(tag)}`}>{tag}</a>)}
+            </div>
+          )
+        }
+
+        <div class="options">
+          {
+            options.map(({ label, slugPart, image }) => (
+              <section class="option" aria-label={label}>
+                <img
+                  src={image.thumb.src}
+                  width={image.width}
+                  height={image.height}
+                  alt={`${label} version`}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="option-body">
+                  <div>
+                    <h2>{label}</h2>
+                    <p class="specs">{image.width} × {image.height} · JPG · {formatBytes(image.bytes)}</p>
+                  </div>
+                  <a
+                    class="btn"
+                    href={image.url}
+                    download={`${w.slug}-${slugPart}.jpg`}
+                    data-download
+                    data-filename={`${w.slug}-${slugPart}.jpg`}
+                    aria-label={`Download ${label} wallpaper`}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 4v11"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path>
+                    </svg>
+                    <span class="btn-label">Download</span>
+                  </a>
+                </div>
+              </section>
+            ))
+          }
+        </div>
+
+        <div class="status" role="status" aria-live="polite" data-status hidden></div>
+        <p class="ios-tip" data-ios-tip hidden>On iPhone, tap Download, then choose <strong>Save Image</strong> in the share sheet.</p>
+
+        <details class="howto">
+          <summary>How to set it as your wallpaper</summary>
+          <div class="howto-body">
+            <ol>
+              <li>Download both images to your Photos.</li>
+              <li>Open a photo in Photos, tap Share, then <strong>Use as Wallpaper</strong>. Or go to Settings → Wallpaper → Add New Wallpaper → Photos.</li>
+              <li>Choose the Lock Screen image first. Then tap the Home Screen preview to pick the other image.</li>
+            </ol>
+            <p>This website can’t change your wallpaper for you. iOS only lets you do that yourself.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    {
+      more.length > 0 && (
+        <section class="section" aria-labelledby="more-heading">
+          <div class="section-head">
+            <h2 id="more-heading">More in {w.category}</h2>
+            <a class="muted" href={`/category/${w.categorySlug}/`}>See all</a>
+          </div>
+          <ul class="rail">
+            {more.map((o) => <WallpaperCard wallpaper={o} sizes="(min-width: 700px) 270px, 62vw" />)}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  import '../../scripts/download.js';
+</script>

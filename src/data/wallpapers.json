@@ -1,0 +1,50 @@
+[
+  {
+    "id": "001",
+    "title": "Chrome Stars",
+    "category": "Abstract",
+    "tags": ["stars", "night", "sparkle", "blue"],
+    "featured": true,
+    "added": "2026-10-06"
+  },
+  {
+    "id": "002",
+    "title": "Quiet Horizon",
+    "category": "Minimal",
+    "tags": ["sunset", "warm", "sun", "calm"],
+    "featured": false,
+    "added": "2026-10-05"
+  },
+  {
+    "id": "003",
+    "title": "Misty Pines",
+    "category": "Nature",
+    "tags": ["forest", "trees", "fog", "green"],
+    "featured": true,
+    "added": "2026-10-04"
+  },
+  {
+    "id": "004",
+    "title": "Midnight Grid",
+    "category": "Dark",
+    "tags": ["neon", "grid", "purple", "cyber"],
+    "featured": false,
+    "added": "2026-10-03"
+  },
+  {
+    "id": "005",
+    "title": "Glass Orbs",
+    "category": "3D",
+    "tags": ["spheres", "gradient", "colorful", "render"],
+    "featured": true,
+    "added": "2026-10-02"
+  },
+  {
+    "id": "006",
+    "title": "Paper Moon",
+    "category": "Other",
+    "tags": ["moon", "night", "navy", "crescent"],
+    "featured": false,
+    "added": "2026-10-01"
+  }
+]

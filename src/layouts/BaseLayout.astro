@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Absolute or root-relative image used for social previews. */
+  image?: string;
+}
+const { title, description = site.description, image } = Astro.props;
+
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const imageUrl = image && Astro.site ? new URL(image, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang="en" style={`--accent: ${site.accent}`}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={site.accent} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+
+    <!-- Marks the page as script-enabled before first paint so JS-only UI doesn't flash. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label={`${site.name} home`}>
+          <span class="logo-mark" aria-hidden="true">{site.logoMark}</span>
+          <span>{site.name}</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {site.name}</span>
+        <span>Made for iPhone</span>
+      </div>
+    </footer>
+  </body>
+</html>

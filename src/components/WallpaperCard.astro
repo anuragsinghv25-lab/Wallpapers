@@ -1,0 +1,50 @@
+---
+import type { Wallpaper } from '../lib/wallpapers';
+
+interface Props {
+  wallpaper: Wallpaper;
+  /** Load immediately (use for images visible without scrolling). */
+  eager?: boolean;
+  /** Marks cards hidden behind "Show more" until the script reveals them. */
+  late?: boolean;
+  sizes?: string;
+}
+const {
+  wallpaper: w,
+  eager = false,
+  late = false,
+  sizes = '(min-width: 1000px) 280px, (min-width: 700px) 31vw, 46vw',
+} = Astro.props;
+
+// Cards only need the small derivatives; the big one is for the detail page.
+const small = w.preview.variants.filter((v) => v.w <= 800);
+const variants = small.length ? small : w.preview.variants;
+const srcset = variants.map((v) => `${v.src} ${v.w}w`).join(', ');
+const fallback = variants[variants.length - 1];
+
+// Pre-normalised text the search script matches against.
+const norm = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '');
+const haystack = norm([w.title, w.category, ...w.tags].join(' '));
+---
+
+<li data-card data-search={haystack} data-late={late ? '' : undefined}>
+  <a class="card" href={`/w/${w.slug}/`}>
+    <span class="card-media">
+      <img
+        src={fallback.src}
+        srcset={srcset}
+        sizes={sizes}
+        width={w.preview.width}
+        height={w.preview.height}
+        alt={`${w.title} iPhone wallpaper preview`}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding="async"
+      />
+    </span>
+    <span class="card-meta">
+      <strong>{w.title}</strong>
+      <span>{w.category}</span>
+    </span>
+  </a>
+</li>

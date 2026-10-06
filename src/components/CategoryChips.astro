@@ -1,0 +1,23 @@
+---
+import { categories, countsByCategory } from '../lib/wallpapers';
+
+interface Props {
+  /** Slug of the active category; leave out on the home page. */
+  current?: string;
+}
+const { current } = Astro.props;
+const counts = countsByCategory();
+// Only categories that actually contain wallpapers are shown.
+const visible = categories.filter((c) => (counts.get(c.slug) ?? 0) > 0);
+---
+
+<nav class="chips" aria-label="Categories">
+  <a class="chip" href="/" aria-current={current ? undefined : 'page'}>All</a>
+  {
+    visible.map((c) => (
+      <a class="chip" href={`/category/${c.slug}/`} aria-current={current === c.slug ? 'page' : undefined}>
+        {c.name} <small>{counts.get(c.slug)}</small>
+      </a>
+    ))
+  }
+</nav>

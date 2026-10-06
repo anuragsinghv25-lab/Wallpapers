@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+.env.*
+
+# Generated at build time by scripts/make-thumbnails.mjs. Never commit these.
+public/generated/
+src/generated/

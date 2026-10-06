@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import Gallery from '../components/Gallery.astro';
+import SearchBar from '../components/SearchBar.astro';
+import WallpaperCard from '../components/WallpaperCard.astro';
+import { site } from '../config/site';
+import { wallpapers, featured } from '../lib/wallpapers';
+
+const featuredItems = featured(site.featuredLimit);
+const hasFeatured = featuredItems.length > 0;
+---
+
+<BaseLayout image={wallpapers[0]?.preview.variants.at(-1)?.src}>
+  <div class="wrap">
+    <section class="hero">
+      <h1>{site.tagline}</h1>
+      <p>Pick a set, then save the Lock Screen and Home Screen wallpapers to your iPhone.</p>
+      <SearchBar />
+    </section>
+
+    <CategoryChips />
+
+    {
+      hasFeatured && (
+        <section class="section" aria-labelledby="featured-heading" data-hide-on-search>
+          <div class="section-head">
+            <h2 id="featured-heading">Featured</h2>
+          </div>
+          <ul class="rail">
+            {featuredItems.map((w, i) => (
+              <WallpaperCard wallpaper={w} eager={i < 2} sizes="(min-width: 700px) 270px, 62vw" />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <Gallery wallpapers={wallpapers} heading="Latest" eagerCount={hasFeatured ? 0 : 4} />
+  </div>
+</BaseLayout>
+
