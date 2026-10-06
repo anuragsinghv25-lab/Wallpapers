@@ -5,6 +5,8 @@
 export const site = {
   /** Shown in the header, page titles and the favicon. */
   name: 'Wallpapers',
+  /** Shown in the footer as "Created and curated by …". */
+  creator: 'Anurag',
   /** One or two characters shown in the logo mark and favicon. */
   logoMark: 'W',
   /** Short line under the home page heading. */

@@ -55,7 +55,7 @@ const imageUrl = image && Astro.site ? new URL(image, Astro.site).href : undefin
 
     <footer class="site-footer">
       <div class="wrap">
-        <span>© {new Date().getFullYear()} {site.name}</span>
+        <span>© {new Date().getFullYear()} {site.name} · Created and curated by {site.creator}</span>
         <span>Made for iPhone</span>
       </div>
     </footer>
